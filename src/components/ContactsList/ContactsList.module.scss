@@ -1,0 +1,15 @@
+.contactsList {
+    padding-block: 35px;
+}
+
+.noItem{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 5px 5px 0 rgba(0,0,0,.02);
+    margin-bottom: 10px;
+    padding: 12px 20px;
+    flex-grow: 1;
+}
