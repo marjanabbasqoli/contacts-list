@@ -1,0 +1,43 @@
+.sureBox {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+.buttonsWrap{
+    display: flex;
+    margin-top: 15px;
+    > *:not(:last-child) {
+        margin-inline-end: 10px;
+    }
+
+    button {
+        height: 40px;
+        min-width: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        color: white;
+        font-size: 1rem;
+        border-radius: 5px;
+        font-family: yekan;
+        cursor: pointer;
+    
+        &:first-child {
+            background: green;
+        }
+    
+        &:last-child{
+            background: red;
+        }
+    }
+}

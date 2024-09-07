@@ -1,5 +1,9 @@
 import { useState , useEffect } from "react";
+
 import { toast } from 'react-toastify';
+import { FaCircleXmark } from "react-icons/fa6";
+
+import { Inputs } from "../../constansts/Inputs";
 
 import styles from "./AddContact.module.scss";
 
@@ -26,29 +30,33 @@ function AddContact({isAddContact , setIsAddContact , contacts , setSearchedCont
 
     useEffect(() => {
         const isEmpty = Object.values(form).includes('');
-        setIsValidate(!(isEmpty || !form.email.match(validEmailRegex) || !form.phone.match(validPhoneRegex)) ? true : false);
+        const isExist = contacts.find(c => c.name.includes(form.name));
+        setIsValidate(!(isExist || isEmpty || !form.email.match(validEmailRegex) || !form.phone.match(validPhoneRegex)) ? true : false);
     }, [form]);
 
     const changeHandler = (e) => {
         const name = e.target.name;
         const value = e.target.value.trim();
         setForm(form => ({...form , [name]: value}));
-        validation(name , value , message , setMessage , setIsValidate);
+        validation(name , value , message , setMessage);
     }
 
-    const validation = (name, value, message, setMessage, setIsValidate) => {
-        setMessage({ ...message, [name]: !value ? "plase fill field" : "" });
+    const validation = (name, value, message, setMessage) => {
+        setMessage({ ...message, [name]: !value ? "لطفا اطلاعات خو را وارد نمایید" : "" });
+
+        const isExist = name === "name" && value && contacts.find(c => c.name.includes(value));
+        isExist && setMessage({ ...message, name: "این نام قبلا اضافه شده است"});
 
         const validEmail = name === "email" && value && !value.match(validEmailRegex);
-        validEmail && setMessage({ ...message, email: "please enter a valid email" });
+        validEmail && setMessage({ ...message, email: "لطفا یک ایمیل معتبر وارد کنید" });
        
         const validPhone = name === "phone" && value && !value.match(validPhoneRegex);
-        validPhone && setMessage({ ...message, phone: "please enter a valid phone" });
+        validPhone && setMessage({ ...message, phone: "لطفا یک شماره تلفن معتبر وارد نمایید" });
     };
 
     const submitHandler = (e) => {
         e.preventDefault();
-        
+       
         if(isValidate) {
             contacts.push({id: Math.ceil((Math.random()* 10000) * (Math.random() * 24)) , ...form});
             localStorage.setItem('contacts' , JSON.stringify(contacts));
@@ -58,22 +66,25 @@ function AddContact({isAddContact , setIsAddContact , contacts , setSearchedCont
         } 
     }
 
+    const closeModal = (e) => {
+        !e.target.closest('.container') && setIsAddContact(false)
+    }
+
   return (
     <> 
-        <div className={`modal ${isAddContact ? 'show-modal' : 'hide-modal'}`}>
+        <div className={`modal ${isAddContact ? 'show-modal' : ''}`} onClick={(e) => closeModal(e)}>
             <div className="container">
-                <button onClick={() => setIsAddContact(false)} className="circle-icon">X</button>
+                <button onClick={() => setIsAddContact(false)} className="close"><FaCircleXmark /></button>
 
                 <form onSubmit={submitHandler}>
-                    <input type="text" placeholder="نام" name="name" value={form.name} onChange={changeHandler} onSelect={changeHandler} className="star"/>
-                    <div className='message'>{message.name}</div>
-                    <input type="email" placeholder="ایمیل" name="email" value={form.email} onChange={changeHandler}/>
-                    <div className='message'>{message.email}</div>
-                    <input type="number" placeholder="تلفن" name="phone" value={form.phone} onChange={changeHandler}/>
-                    <div className='message'>{message.phone}</div>
-                    <input type="text" placeholder="تخصص" name="job" value={form.job} onChange={changeHandler} />
-                    <div className="message">{message.job}</div>
-                    <button type="submit" className={`theme-button ${!isValidate ? styles.disabled : ''}`}>افزودن</button>
+                    {Inputs.map((input, index) => 
+                        <div className="input-wrap" key={index}>
+                            <input type={input.type} name={input.name} placeholder={input.placeholder} value={form[name]} onChange={changeHandler} className={styles.input}/>
+                            <div className='message'>{message[input.name]}</div>
+                        </div>     
+                    )}
+                
+                    <button type="submit" className={`submit ${!isValidate ? 'disabled' : ''}`}>افزودن</button>
                 </form>
             </div>
         </div>
@@ -81,4 +92,4 @@ function AddContact({isAddContact , setIsAddContact , contacts , setSearchedCont
   )
 }
 
-export default AddContact   
+export default AddContact;   
