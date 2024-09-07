@@ -86,7 +86,7 @@ function EditContact({isEditContact , setIsEditContact , editItemId , contacts ,
                 <button type="submit" className={`submit ${!isValidate ? 'disabled' : ''}`}>ویرایش</button>
             </form>
 
-            <SureBox showBox={showBox} sureHandler={sureHandler} />
+            <SureBox showBox={showBox} sureHandler={sureHandler} boxTitle={"آیا اطلاعات مخاطب ویرایش شود؟"} />
         </div>
         
     </div>

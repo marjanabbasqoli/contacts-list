@@ -1,3 +1,5 @@
+import SureBox from "../SureBox/SureBox";
+
 function DeleteContact(props) { 
   const {deleteItemId , contacts , setSearchedContact , showBox , setShowBox , setIsDelete} = props;
 
@@ -15,13 +17,7 @@ function DeleteContact(props) {
   }
 
   return (
-    <>
-    {showBox && <div className="sure-box">
-      <p>آیا مایل به حذف این آیتم هستید؟</p>
-      <button onClick={() => sureHandler(true)}>بله</button>
-      <button onClick={() => sureHandler(false)}>خیر</button>
-    </div>}
-    </>
+    <SureBox showBox={showBox} sureHandler={sureHandler} isModal={true} boxTitle={"آیا از حذف مخاطب مطمئن هستید؟"}/>
   )
 }
 
