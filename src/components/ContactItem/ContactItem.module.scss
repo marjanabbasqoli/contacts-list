@@ -37,7 +37,6 @@
 }
 
 .checkbox {
-    // opacity: 0;
     border: 1px solid #d9e1ea;
     width: 20px;
     height: 20px;
@@ -45,7 +44,12 @@
     border-radius: 5px;
     background: white;
     position: relative;
+    transition: all .3s;
     display: none;
+
+    &.checked{
+        background: #695db5;
+    }
 
     svg {
         position: absolute;
@@ -53,6 +57,7 @@
         right: 50%;
         transform: translate(50%,-50%);
         color: white;
+        transition: all .3s;
     }
 
     [type="checkbox"] {
@@ -61,12 +66,9 @@
         height: 20px;
         top: 0;
         right: 0;
-        // opacity: 0;
+        opacity: 0;
         z-index: 2;
-
-        &:checked + svg{
-            opacity: 1;
-        }
+        cursor: pointer;
     }
 }
 

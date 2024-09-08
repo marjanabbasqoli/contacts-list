@@ -29,13 +29,6 @@ function ContactsList() {
 
     saveToLocalstorage();
 
-    const checkboxHandler = (id , e) => {
-        const indexItem = contacts.findIndex(c => c.id === id);
-        contacts[indexItem].isChecked = e.target.checked;
-        setCheckedCount(checkedCount => e.target.checked ? checkedCount + 1 : checkedCount - 1);
-        saveToLocalstorage();
-    }
-
     const deleteHandler = (id) => {
         setIsDelete(true);
         setShowBox(true);
@@ -53,10 +46,16 @@ function ContactsList() {
         :
         setSearchedContact(contacts);
     }
+
+    const checkboxHandler = (id , e) => {
+        const indexItem = contacts.findIndex(c => c.id === id);
+        contacts[indexItem].isChecked = e.target.checked;
+        setCheckedCount(checkedCount => e.target.checked ? checkedCount + 1 : checkedCount - 1);
+        saveToLocalstorage();
+    }
     
     const deleteMultiHandler = () => {
-        setIsDeleteAll(true);
-        setShowBox(true);
+        setIsDeleteAll(isDeleteAll => !isDeleteAll);
     }
 
     return (
@@ -66,7 +65,7 @@ function ContactsList() {
             <div className="container">
                 <div className={styles.contactsList}>
                     {searchedContact.length ? 
-                        searchedContact.map(contact => <ContactItem key={contact.id} data={contact} deleteHandler={deleteHandler} editHandler={editHandler} checkboxHandler={checkboxHandler} isDeleteAll={isDeleteAll} />)
+                        searchedContact.map(contact => <ContactItem key={contact.id} data={contact} deleteHandler={deleteHandler} editHandler={editHandler} checkboxHandler={checkboxHandler} isDeleteAll={isDeleteAll} checkedCount={checkedCount} />)
                         :
                         <div className={styles.noItem}>مخاطبی یافت نشد</div>
                     }
@@ -77,7 +76,8 @@ function ContactsList() {
             {isAddContact &&<AddContact isAddContact={isAddContact} setIsAddContact={setIsAddContact} contacts={contacts} setSearchedContact={setSearchedContact} />}
             {isEditContact && <EditContact isEditContact= {isEditContact} setIsEditContact={setIsEditContact} contacts={contacts} setSearchedContact={setSearchedContact} editItemId={editItemId} />}
 
-            {isDeleteAll && !!checkedCount && <DeleteMultiContact contacts={contacts} setSearchedContact={setSearchedContact} showBox={showBox} setShowBox={setShowBox} checkedCount={checkedCount} setCheckedCount={setCheckedCount} />}
+            {isDeleteAll && <DeleteMultiContact contacts={contacts} setSearchedContact={setSearchedContact} showBox={showBox} setShowBox={setShowBox} checkedCount={checkedCount} setCheckedCount={setCheckedCount} setIsDeleteAll={setIsDeleteAll} />}
+            {!!checkedCount && <div className='container'><button onClick={() => setShowBox(true)} className={styles.deleteAll}>حذف همه</button></div>}
             {isDelete && <DeleteContact contacts={contacts} setSearchedContact={setSearchedContact} deleteItemId={deleteItemId} showBox={showBox} setShowBox={setShowBox} setIsDelete={setIsDelete} />} 
           
         </>

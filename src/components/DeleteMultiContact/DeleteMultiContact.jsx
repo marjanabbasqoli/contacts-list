@@ -1,26 +1,31 @@
-function DeleteMultiContact({contacts , setSearchedContact , showBox , setShowBox , checkedCount , setCheckedCount}) { 
+import SureBox from "../SureBox/SureBox";
 
-  const deleteItems = () => {
-    const newContacts = contacts.filter(contacts => contacts.isChecked !== true);
-    contacts = [...newContacts];
-    setSearchedContact(contacts);
-    localStorage.setItem('contacts' , JSON.stringify(contacts));
+function DeleteMultiContact({contacts , setSearchedContact , showBox , setShowBox , checkedCount , setCheckedCount , setIsDeleteAll}) { 
+  const deleteItems = (sure) => {
+    if(sure) {
+      const newContacts = contacts.filter(contacts => contacts.isChecked !== true);
+      contacts = [...newContacts];
+      setSearchedContact(contacts);
+      localStorage.setItem('contacts' , JSON.stringify(contacts));
+    }
+    else {
+      setIsDeleteAll(false);
+      const newContacts = contacts.map(contact =>({...contact , isChecked: false}));
+      contacts = [...newContacts];
+      setSearchedContact(contacts);
+      localStorage.setItem('contacts' , JSON.stringify(contacts));
+    }
     setCheckedCount(0);
   }
 
   const sureHandler = (sure) => {
-    sure && deleteItems(); 
+    deleteItems(sure); 
     setShowBox(false);
+    setIsDeleteAll(false);
   }
 
   return (
-    <>
-    {showBox && !!checkedCount && <div className="sure-box">
-      <p>آیا مایل به حذف {checkedCount} آیتم هستید؟</p>
-      <button onClick={() => sureHandler(true)}>بله</button>
-      <button onClick={() => sureHandler(false)}>خیر</button>
-    </div>}
-    </>
+    <SureBox showBox={showBox} sureHandler={sureHandler} isModal={true} boxTitle={`آیا اطلاعات ${checkedCount} مخاطب حذف شود؟`} />
   )
 }
 

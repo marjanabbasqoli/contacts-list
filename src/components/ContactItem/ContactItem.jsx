@@ -1,14 +1,30 @@
+import { useEffect, useState } from "react";
+
 import { FaRegPenToSquare , FaRegTrashCan , FaCheck } from "react-icons/fa6";
 
 import styles from "./ContactItem.module.scss";
 
-function ContactItem({data : {id, name , email} , deleteHandler , editHandler , checkboxHandler , isDeleteAll}) {
+function ContactItem({data : {id, name , email} , deleteHandler , editHandler , checkboxHandler , isDeleteAll ,checkedCount}) {
+  
+  const [checked , setChecked] = useState(false);
+  
+  useEffect(() => {
+    setChecked(!checkedCount ? false : checked);
+  } , [checkedCount])
+
   return (
     <>
       <div className={styles.checkboxWrapper}>
-        <div className={`${styles.checkbox} ${isDeleteAll && styles.show}` }>
-            <input type="checkbox" onChange={(e) => checkboxHandler(id , e)} />
-            <FaCheck />
+        <div className={`${styles.checkbox} ${isDeleteAll && styles.show} ${checked ? styles.checked : ''}`}>
+            <input 
+              type="checkbox" 
+              onChange={(e) => {
+                checkboxHandler(id , e);
+                setChecked(checked => !checked);
+              }}
+              checked={checked}
+            />
+            <FaCheck style={!checked && {opacity: 0}}/>
         </div>
         <div className={styles.oneItem}>
           <div className={styles.rightBox}>
