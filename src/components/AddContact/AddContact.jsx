@@ -29,7 +29,7 @@ function AddContact({isAddContact , setIsAddContact , contacts , setSearchedCont
     const [isValidate , setIsValidate] = useState(false);
 
     useEffect(() => {
-        const isEmpty = Object.values(form).includes('');
+        const isEmpty = Object.values(form).splice(0,3).includes('');
         const isExist = contacts.find(c => c.name.includes(form.name));
         setIsValidate(!(isExist || isEmpty || !form.email.match(validEmailRegex) || !form.phone.match(validPhoneRegex)) ? true : false);
     }, [form]);
@@ -42,7 +42,7 @@ function AddContact({isAddContact , setIsAddContact , contacts , setSearchedCont
     }
 
     const validation = (name, value, message, setMessage) => {
-        setMessage({ ...message, [name]: !value ? "لطفا اطلاعات خو را وارد نمایید" : "" });
+        name !== 'job' && setMessage({ ...message, [name]: !value ? "لطفا اطلاعات خو را وارد نمایید" : "" });
 
         const isExist = name === "name" && value && contacts.find(c => c.name.includes(value));
         isExist && setMessage({ ...message, name: "این نام قبلا اضافه شده است"});
@@ -79,7 +79,7 @@ function AddContact({isAddContact , setIsAddContact , contacts , setSearchedCont
                 <form onSubmit={submitHandler}>
                     {Inputs.map((input, index) => 
                         <div className="input-wrap" key={index}>
-                            <input type={input.type} name={input.name} placeholder={input.placeholder} value={form[name]} onChange={changeHandler} className={styles.input}/>
+                            <input type={input.type} name={input.name} placeholder={input.placeholder} value={form[input.name]} onChange={changeHandler} className={styles.input}/>
                             <div className='message'>{message[input.name]}</div>
                         </div>     
                     )}

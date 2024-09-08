@@ -74,7 +74,7 @@ function ContactsList() {
             </div>
 
                 
-            <AddContact isAddContact={isAddContact} setIsAddContact={setIsAddContact} contacts={contacts} setSearchedContact={setSearchedContact} />
+            {isAddContact &&<AddContact isAddContact={isAddContact} setIsAddContact={setIsAddContact} contacts={contacts} setSearchedContact={setSearchedContact} />}
             {isEditContact && <EditContact isEditContact= {isEditContact} setIsEditContact={setIsEditContact} contacts={contacts} setSearchedContact={setSearchedContact} editItemId={editItemId} />}
 
             {isDeleteAll && !!checkedCount && <DeleteMultiContact contacts={contacts} setSearchedContact={setSearchedContact} showBox={showBox} setShowBox={setShowBox} checkedCount={checkedCount} setCheckedCount={setCheckedCount} />}
