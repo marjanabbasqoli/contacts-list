@@ -6,7 +6,7 @@ import { useState } from "react";
 
 import ContactForm from "../ContactForm/ContactForm";
 
-function Header({ setAdd }) {
+function Header({ isDeleteAll, setIsDeleteAll }) {
 	const [showModal, setShowModal] = useState(false);
 
 	return (
@@ -20,15 +20,13 @@ function Header({ setAdd }) {
 							<Search />
 
 							<div className={styles.buttonsWrap}>
-								{
-									<button onClick={() => setShowModal(true)}>
-										<FaUserPlus />
-									</button>
+								<button onClick={() => setShowModal(true)}>
+									<FaUserPlus />
+								</button>
 
-									/*<button onClick={deleteMultiHandler}>
+								<button onClick={() => setIsDeleteAll((isDeleteAll) => !isDeleteAll)}>
 									<FaUserMinus />
-								</button> */
-								}
+								</button>
 							</div>
 						</div>
 					</div>

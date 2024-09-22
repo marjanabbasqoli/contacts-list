@@ -126,7 +126,7 @@ function ContactsList() {
 					setIsDeleteAll={setIsDeleteAll}
 				/>
 			)}
-			
+
 			{!!checkedCount && (
 				<div className="container">
 					<button onClick={() => setShowBox(true)} className={styles.deleteAll}>

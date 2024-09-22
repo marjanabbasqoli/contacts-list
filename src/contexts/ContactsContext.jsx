@@ -52,7 +52,6 @@ const reducer = (state, action) => {
 			return { ...state, contacts: [...newContacts] };
 
 		case "DELETE":
-			deleteFromDb(action.payload);
 			const deletedContacts = contactsData.filter(
 				(contact) => contact.id !== action.payload
 			);
@@ -63,8 +62,8 @@ const reducer = (state, action) => {
 
 		case "DELETE_CHECKED_ITEM":
 			const selectedContacts = action.payload
-				? contactsData.filter((contacts) => contacts.isChecked !== true)
-				: contactsData.map((contact) => ({
+				? state.contacts.filter((contacts) => contacts.isChecked !== true)
+				: state.contacts.map((contact) => ({
 						...contact,
 						isChecked: false,
 				  }));
@@ -79,7 +78,13 @@ const reducer = (state, action) => {
 			// 		: c;
 			// });
 
-			return { ...state };
+			const changeContacts = contactsData.map((contact) =>
+				contact.id === action.payload.id
+					? { ...contact, isChecked: action.payload.e.target.checked }
+					: contact
+			);
+
+			return { ...state, contacts: [...changeContacts] };
 
 		default:
 			throw new Error("invalid action");
@@ -106,17 +111,10 @@ export const ContactsContext = createContext();
 
 function ContactsProvider({ children }) {
 	const [state, dispatch] = useReducer(reducer, initialState);
-	const [checkedCount, setCheckedCount] = useState(0);
-	const [selectedItem, setSelectedItem] = useState({
-		isSelected: false,
-		isConfirm: false,
-	});
-
-	const checkboxHandler = (id, e) => {};
-
-	// const [search, setSearch] = useState({
-	// 	value: "",
-	// 	result: [],
+	// // const [checkedCount, setCheckedCount] = useState(0);
+	// const [selectedItem, setSelectedItem] = useState({
+	// 	isSelected: false,
+	// 	isConfirm: false,
 	// });
 
 	useEffect(() => {
@@ -124,18 +122,13 @@ function ContactsProvider({ children }) {
 			.then((res) => res.json())
 			.then((contacts) => dispatch({ type: "SUCCESS", payload: contacts }))
 			.catch((error) => dispatch({ type: "FAILED", payload: error.message }));
-	}, [state.contacts]);
+	}, []);
 
 	return (
 		<ContactsContext.Provider
 			value={{
 				state,
 				dispatch,
-				checkedCount,
-				setCheckedCount,
-				selectedItem,
-				setSelectedItem,
-				checkboxHandler,
 			}}
 		>
 			{children}

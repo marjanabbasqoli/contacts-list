@@ -44,11 +44,16 @@
 	border-radius: 5px;
 	background: white;
 	position: relative;
-	transition: all 0.3s;
 	display: none;
 
-	&.checked {
-		background: #695db5;
+	div {
+		position: absolute;
+		right: 0;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		border-radius: 5px;
+		transition: all 0.3s;
 	}
 
 	svg {
@@ -58,6 +63,7 @@
 		transform: translate(50%, -50%);
 		color: white;
 		transition: all 0.3s;
+		opacity: 0;
 	}
 
 	[type="checkbox"] {
@@ -66,9 +72,16 @@
 		height: 20px;
 		top: 0;
 		right: 0;
-		// opacity: 0;
+		opacity: 0;
 		z-index: 2;
 		cursor: pointer;
+
+		&:checked + div {
+			background: #695db5;
+			svg {
+				opacity: 1;
+			}
+		}
 	}
 }
 

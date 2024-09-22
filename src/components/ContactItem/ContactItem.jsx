@@ -6,32 +6,65 @@ import styles from "./ContactItem.module.scss";
 
 import ContactForm from "../ContactForm/ContactForm";
 import DeleteContact from "../DeleteContact/DeleteContact";
+import { ContactsContext } from "../../contexts/ContactsContext";
+import DeleteMultiContact from "../DeleteMultiContact/DeleteMultiContact";
 
-function ContactItem({ data: { id, name, email } }) {
+function ContactItem({
+	data: { id, name, email },
+	isDeleteAll,
+	setIsDeleteAll,
+	checkedCount,
+	setCheckedCount,
+}) {
 	const [showModal, setShowModal] = useState(false);
 	const [deleteItem, setDeleteItem] = useState(false);
 	// const [confirm, setConfirm] = useState(false);
+	const {
+		state: { contacts },
+		dispatch,
+	} = useContext(ContactsContext);
 
-	const [checked, setChecked] = useState(false);
+	// const [checked, setChecked] = useState(false);
+	// let checked = false;
 
 	// useEffect(() => {
 	// 	setChecked(!checkedCount ? false : checked);
 	// }, [checkedCount]);
 
+	const checkboxHandler = (id, e) => {
+		// const indexItem = contacts.findIndex((c) => c.id === id);
+		// contacts[indexItem].isChecked = e.target.checked;
+		// const newContacts = contacts.map((contact) =>
+		// 	contact.id === id ? { ...contact, isChecked: e.target.checked } : contact
+		// );
+		// contacts = [...newContacts];
+		// console.log(contacts);
+		// console.log(e.target.checked ? checkedCount + 1 : checkedCount - 1);
+		// console.log(checkedCount);
+	};
+
+	console.log({ checkedCount });
+
 	return (
 		<>
 			<div className={styles.checkboxWrapper}>
-				{/* <div className={`${styles.checkbox} ${isDeleteAll && styles.show} ${checked ? styles.checked : ''}`}>
-            <input 
-              type="checkbox" 
-              onChange={(e) => {
-                checkboxHandler(id , e);
-                setChecked(checked => !checked);
-              }}
-              checked={checked}
-            />
-            <FaCheck style={!checked && {opacity: 0}}/>
-        </div> */}
+				<div className={`${styles.checkbox} ${isDeleteAll && styles.show} `}>
+					<input
+						type="checkbox"
+						onChange={(e) => {
+							dispatch({ type: "CHECKED", payload: { id, e } });
+							// setChecked((checked) => !checked);
+							// checked = e.target.checked;
+							setCheckedCount((checkedCount) =>
+								e.target.checked ? checkedCount + 1 : checkedCount - 1
+							);
+						}}
+					/>
+
+					<div>
+						<FaCheck />
+					</div>
+				</div>
 				<div className={styles.oneItem}>
 					<div className={styles.rightBox}>
 						<div className={styles.userInfo}>
