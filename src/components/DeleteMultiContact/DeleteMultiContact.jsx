@@ -1,32 +1,45 @@
-import SureBox from "../SureBox/SureBox";
+// import SureBox from "../SureBox/SureBox";
 
-function DeleteMultiContact({contacts , setSearchedContact , showBox , setShowBox , checkedCount , setCheckedCount , setIsDeleteAll}) { 
-  const deleteItems = (sure) => {
-    if(sure) {
-      const newContacts = contacts.filter(contacts => contacts.isChecked !== true);
-      contacts = [...newContacts];
-      setSearchedContact(contacts);
-      localStorage.setItem('contacts' , JSON.stringify(contacts));
-    }
-    else {
-      setIsDeleteAll(false);
-      const newContacts = contacts.map(contact =>({...contact , isChecked: false}));
-      contacts = [...newContacts];
-      setSearchedContact(contacts);
-      localStorage.setItem('contacts' , JSON.stringify(contacts));
-    }
-    setCheckedCount(0);
-  }
+import { useContext } from "react";
+import { ContactsContext } from "../../contexts/ContactsContext";
+import Confirm from "../Confirm/Confirm";
 
-  const sureHandler = (sure) => {
-    deleteItems(sure); 
-    setShowBox(false);
-    setIsDeleteAll(false);
-  }
+function DeleteMultiContact() {
+	const {
+		dispatch,
+		setCheckedCount,
+		selectedItem: { isConfirm },
+		setSelectedItem,
+	} = useContext(ContactsContext);
 
-  return (
-    <SureBox showBox={showBox} sureHandler={sureHandler} isModal={true} boxTitle={`آیا اطلاعات ${checkedCount} مخاطب حذف شود؟`} />
-  )
+	const deleteItems = (confirm) => {
+		dispatch({ type: "DELETE_CHECKED_ITEM", payload: confirm });
+		setCheckedCount(0);
+	};
+
+	const confirmHandler = (confirm) => {
+		deleteItems(confirm);
+		setSelectedItem({
+			isSelected: false,
+			isConfirm: false,
+		});
+		// setShowModal(false);
+		// setIsDeleteAll(false);
+	};
+
+	return (
+		// <SureBox
+		// 	showModal={showModal}
+		// 	sureHandler={sureHandler}
+		// 	isModal={true}
+		// 	boxTitle={`آیا اطلاعات ${checkedCount} مخاطب حذف شود؟`}
+		// />
+		<Confirm
+			confirm={isConfirm}
+			confirmHandler={confirmHandler}
+			boxTitle={"مخاطب از لیست حذف شود؟"}
+		/>
+	);
 }
 
-export default DeleteMultiContact
+export default DeleteMultiContact;

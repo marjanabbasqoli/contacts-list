@@ -1,9 +1,12 @@
-import ContactsList from './components/ContactsList/ContactsList'
+import ContactsList from "./components/ContactsList/ContactsList";
+import ContactsProvider from "./contexts/ContactsContext";
 
 function App() {
-  return (
-    <ContactsList />
-  )
+	return (
+		<ContactsProvider>
+			<ContactsList />
+		</ContactsProvider>
+	);
 }
 
-export default App
+export default App;

@@ -1,24 +1,33 @@
-import SureBox from "../SureBox/SureBox";
+import { useContext, useState } from "react";
+import { toast } from "react-toastify";
 
-function DeleteContact(props) { 
-  const {deleteItemId , contacts , setSearchedContact , showBox , setShowBox , setIsDelete} = props;
+import { ContactsContext } from "../../contexts/ContactsContext";
+import Confirm from "../Confirm/Confirm";
 
-  const deleteItem = (id) => {
-    const newContacts = contacts.filter(c => c.id !== id);
-    // contacts = [...newContacts];
-    setSearchedContact([...newContacts]);
-    localStorage.setItem('contacts' , JSON.stringify([...newContacts]));
-  }
+function DeleteContact({ id }) {
+	const [confirm, setConfirm] = useState(true);
+	const { dispatch } = useContext(ContactsContext);
 
-  const sureHandler = (sure) => {
-    sure && deleteItem(deleteItemId);
-    setShowBox(false);
-    setIsDelete(false);
-  }
+	const confirmHandler = (confirm) => {
+		confirm && deleteHandler();
+		setConfirm(false);
+	};
 
-  return (
-    <SureBox showBox={showBox} sureHandler={sureHandler} isModal={true} boxTitle={"آیا از حذف مخاطب مطمئن هستید؟"}/>
-  )
+	const deleteHandler = () => {
+		dispatch({
+			type: "DELETE",
+			payload: id,
+		});
+		toast.success("مخاطب از لیست حذف شد");
+	};
+
+	return (
+		<Confirm
+			confirm={confirm}
+			confirmHandler={confirmHandler}
+			boxTitle={"مخاطب از لیست حذف شود؟"}
+		/>
+	);
 }
 
-export default DeleteContact
+export default DeleteContact;
